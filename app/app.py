@@ -1,3 +1,4 @@
+import asyncio
 import os
 from revChatGPT.Official import AsyncChatbot
 from dotenv import load_dotenv
@@ -56,4 +57,4 @@ if __name__ == '__main__':
     model = os.getenv("MODEL", "text-davinci-003")        
     chatbot = AsyncChatbot(api_key=key, engine=model)
 
-    await run()
+    asyncio.run(run())
