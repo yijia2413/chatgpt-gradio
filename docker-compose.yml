@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  chatgpt-gradio-proxy:
+    build: .
+    image: chatgpt-gradio-proxy
+    container_name: chatgpt-gradio-server
+    volumes:
+      - ./.env:/app/.env
+    ports:
+      - 8082:8082

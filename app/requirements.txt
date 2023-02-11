@@ -1,0 +1,3 @@
+python-dotenv==0.21.1
+revChatGPT==1.2.1
+gradio
