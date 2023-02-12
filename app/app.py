@@ -1,9 +1,9 @@
 import asyncio
 import os
+import gradio as gr
+from loguru import logger
 from revChatGPT.Official import AsyncChatbot
 from dotenv import load_dotenv
-import gradio as gr
-from log import setup_logger
 
 def launch(meta:dict):
     demo = gr.Interface(fn=handle_response,
@@ -11,12 +11,12 @@ def launch(meta:dict):
         outputs=gr.Textbox(lines=5)
     )
 
-    host = '0.0.0.0'
+    host = "0.0.0.0"
     port = 8082
 
-    share = meta.get('share')
-    username = meta.get('username')
-    password = meta.get('password')
+    share = meta.get("share")
+    username = meta.get("username")
+    password = meta.get("password")
     print(meta)
     if (not username) or (not password):
         demo.launch(server_name=host, server_port=port, share=share)
@@ -24,6 +24,7 @@ def launch(meta:dict):
         demo.launch(server_name=host, server_port=port, share=share, auth=(username, password))
 
 async def handle_response(message) -> str:
+    logger.info(message)
     response = await chatbot.ask(message)
     try:
         responseMessage = response["choices"][0]["text"]
@@ -39,21 +40,19 @@ async def test():
 
 async def run():
     meta = {
-        'share': False if os.getenv("SHARE") == 0 else True,
-        'username': os.getenv("USERNAME"),
-        'password': os.getenv("PASSWORD"),
+        "share": False if os.getenv("SHARE") == 0 else True,
+        "username": os.getenv("USERNAME"),
+        "password": os.getenv("PASSWORD"),
     }
     launch(meta)
 
-if __name__ == '__main__':
-    logger = setup_logger(__name__)
-
+if __name__ == "__main__":
     load_dotenv()
     key = os.getenv("OPENAI_KEY")
-    if (not key) or (not key.startswith('sk-')):
+    if (not key) or (not key.startswith("sk-")):
         logger.error("invalid openai key, please check ...")
     
-    # FIXME: now openai default model works again (2023-02-11), if not work, please change
+    # FIXME: text-davinci-003 is a paid model, it will cost fees
     model = os.getenv("MODEL", "text-davinci-003")        
     chatbot = AsyncChatbot(api_key=key, engine=model)
 
