@@ -1,7 +1,7 @@
 # ChatGPT Gradio Proxy
 
 ## Features
-* Web access ChatGPT 
+* Web access ChatGPT
 
 ## Setup
 ### Docker Install
@@ -13,6 +13,7 @@
 
 ### Local Install
 * fill in `.env`
+* run `source .env`
 * run `bash run_local.sh`
 
 > then you can access your ChatGPT Web on `http://{your_ip}:8082`

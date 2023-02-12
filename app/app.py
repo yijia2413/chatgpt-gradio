@@ -17,10 +17,10 @@ def launch(meta:dict):
     share = meta.get("share")
     username = meta.get("username")
     password = meta.get("password")
-    print(meta)
     if (not username) or (not password):
         demo.launch(server_name=host, server_port=port, share=share)
     else:
+        # https://discuss.huggingface.co/t/gradio-authentication-not-working-in-spaces/25629
         demo.launch(server_name=host, server_port=port, share=share, auth=(username, password))
 
 async def handle_response(message) -> str:
@@ -44,9 +44,12 @@ async def run():
         "username": os.getenv("USERNAME"),
         "password": os.getenv("PASSWORD"),
     }
+    logger.info('starting...')
     launch(meta)
 
 if __name__ == "__main__":
+    logger.add("app.log", rotation="10 MB", retention="365 days")
+
     load_dotenv()
     key = os.getenv("OPENAI_KEY")
     if (not key) or (not key.startswith("sk-")):
